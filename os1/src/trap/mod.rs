@@ -1,13 +1,13 @@
 //! Trap handling functionality
-//! 
+//!
 //! For rCore, we have a single trap entry point, namely `__alltraps`. At
 //! initialization in [`init()`], we set the `stvec` CSR to point to it.
-//! 
+//!
 //! All traps go through `__alltrap`, which is defined in `trap.S`. The
 //! assembly language code does just enough work restore the kernel space
 //! context, ensuring that Rust code safely runs, and transfers control to
 //! [`trap_handler()`].
-//! 
+//!
 //! It then calls different functionlity based on what exactly the exception
 //! was. For example, timer interrupts trigger task preemption, and syscalls go
 //! to [`syscall()`].
@@ -50,7 +50,7 @@ pub fn trap_handler(cx: &mut TrapContext) -> &mut TrapContext {
     match scause.cause() {
         Trap::Exception(Exception::UserEnvCall) => {
             cx.sepc += 4;
-            cx.x[10] = syscall(cx.x[17], [cx.x[11], cx.x[12]]) as usize;
+            cx.x[10] = syscall(cx.x[17], [cx.x[10], cx.x[11], cx.x[12]]) as usize;
         }
         Trap::Exception(Exception::StoreFault) | Trap::Exception(Exception::StorePageFault) => {
             error!("[kernel] PageFault in application, bad addr = {:#x}, bad instruction = {:#x}, core dumped.", stval, cx.sepc);

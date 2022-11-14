@@ -1,18 +1,18 @@
 //! The main module and entrypoint
-//! 
+//!
 //! Various facilities of the kernels are implemented as submodules. The most
 //! important ones are:
-//! 
+//!
 //! - [`trap`]: Handles all cases of switching from userspace to the kernel
 //! - [`task`]: Task management
 //! - [`syscall`]: System call handling and implementation
-//! 
+//!
 //! The operating system also starts in this module. Kernel code starts
 //! executing from `entry.asm`, after which [`rust_main()`] is called to
 //! initialize various pieces of functionality. (See its source code for
 //! details.)
-//! 
-//! We then call [`task::run_first_task()`] and for the first time go to 
+//!
+//! We then call [`task::run_first_task()`] and for the first time go to
 //! userspace.
 
 #![no_std]
@@ -20,16 +20,24 @@
 #![feature(panic_info_message)]
 #![feature(alloc_error_handler)]
 
-use log::*;
+// use log::*;
 #[macro_use]
 extern crate log;
 extern crate alloc;
 
 #[macro_use]
 mod console;
+mod config;
+mod heap_alloc;
 mod lang_items;
+mod loader;
 mod logging;
 mod sbi;
+mod sync;
+mod syscall;
+mod task;
+mod timer;
+mod trap;
 
 core::arch::global_asm!(include_str!("entry.asm"));
 core::arch::global_asm!(include_str!("link_app.S"));

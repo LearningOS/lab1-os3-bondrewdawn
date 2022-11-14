@@ -1,5 +1,5 @@
 //! Loading user applications into memory
-//! 
+//!
 //! For chapter 3, user applications are simply part of the data included in the
 //! kernel binary, so we only need to copy them to the space allocated for each
 //! app to load them. We also allocate fixed spaces for each task's

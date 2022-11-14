@@ -137,6 +137,25 @@ impl TaskManager {
     }
 
     // LAB1: Try to implement your function to update or get task info!
+    fn update_syscall_times(&self, syscall_id: usize) {
+        let mut inner = self.inner.exclusive_access();
+        let index = inner.current_task;
+        inner.tasks[index].syscall_times[syscall_id] += 1;
+    }
+
+    fn set_task_info(&self, taskinfo: *mut TaskInfo) {
+        let inner = self.inner.exclusive_access();
+        let t = (get_time() - inner.tasks[inner.current_task].task_begin_time) * 1000 / CLOCK_FREQ;
+        // print!("{}", t);
+        unsafe {
+            *taskinfo = TaskInfo {
+                // status: inner.tasks[inner.current_task].task_status,
+                status: TaskStatus::Running,
+                syscall_times: inner.tasks[inner.current_task].syscall_times,
+                time: t,
+            };
+        }
+    }
 }
 
 /// Run the first task in task list.
@@ -174,3 +193,11 @@ pub fn exit_current_and_run_next() {
 
 // LAB1: Public functions implemented here provide interfaces.
 // You may use TASK_MANAGER member functions to handle requests.
+
+pub fn update_syscall_times(syscall_id: usize) {
+    TASK_MANAGER.update_syscall_times(syscall_id);
+}
+
+pub fn set_task_info(taskinfo: *mut TaskInfo) {
+    TASK_MANAGER.set_task_info(taskinfo);
+}
