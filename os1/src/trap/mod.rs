@@ -38,7 +38,7 @@ pub fn init() {
 /// timer interrupt enabled
 pub fn enable_timer_interrupt() {
     unsafe {
-        sie::set_timer();
+        sie::set_stimer();
     }
 }
 

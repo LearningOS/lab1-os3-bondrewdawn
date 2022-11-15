@@ -12,9 +12,9 @@ pub struct TimeVal {
 }
 
 pub struct TaskInfo {
-    status: TaskStatus,
-    syscall_times: [u32; MAX_SYSCALL_NUM],
-    time: usize,
+    pub status: TaskStatus,
+    pub syscall_times: [u32; MAX_SYSCALL_NUM],
+    pub time: usize,
 }
 
 /// task exits and submit an exit code
