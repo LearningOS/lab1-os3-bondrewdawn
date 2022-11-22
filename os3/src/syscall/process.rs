@@ -2,7 +2,7 @@
 
 use crate::config::{MAX_APP_NUM, MAX_SYSCALL_NUM};
 // use crate::task::{exit_current_and_run_next, suspend_current_and_run_next, TaskStatus, set_task_info};
-use crate::task::{exit_current_and_run_next, suspend_current_and_run_next, TaskStatus};
+use crate::task::{exit_current_and_run_next, suspend_current_and_run_next, TaskStatus, get_task_info, update_syscall_times};
 use crate::timer::get_time_us;
 
 #[repr(C)]
@@ -47,5 +47,10 @@ pub fn sys_get_time(ts: *mut TimeVal, _tz: usize) -> isize {
 pub fn sys_task_info(ti: *mut TaskInfo) -> isize {
     // -1
     // set_task_info(ti);
-    -1
+    get_task_info(ti);
+    0
+}
+
+pub fn syscall_times_update(syscall_id: usize) {
+    update_syscall_times(syscall_id);
 }
